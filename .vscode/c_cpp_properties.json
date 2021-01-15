@@ -1,0 +1,34 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "C:\\Users\\ian\\OneDrive\\Documents\\Arduino\\hardware\\CubeCell\\ASR650x-Arduino\\**",
+                "C:\\Users\\ian\\AppData\\Local\\Arduino15\\packages\\CubeCell\\tools\\**",
+                "C:\\Users\\ian\\OneDrive\\Documents\\Arduino\\libraries\\**",
+                "C:\\Program Files (x86)\\Arduino\\libraries\\**",
+                "C:/Users/ian/OneDrive/Documents/Arduino/hardware/CubeCell/ASR650x-Arduino/libraries/Time",
+                "C:/Users/ian/OneDrive/Documents/Arduino/hardware/CubeCell/ASR650x-Arduino/libraries/RGB/src"
+            ],
+            "forcedInclude": [],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE",
+                "REGION_EU868",
+                "ACTIVE_REGION=LORAMAC_REGION_EU868",
+                "LORAWAN_CLASS=CLASS_C",
+                "LORAWAN_NETMODE=true",
+                "LORAWAN_ADR=true",
+                "LORAWAN_UPLINKMODE=true",
+                "LORAWAN_NET_RESERVE=false",
+                "USBCON"
+            ],
+            "intelliSenseMode": "gcc-arm",
+            "compilerPath": "C:\\Users\\ian\\OneDrive\\Documents\\Arduino\\hardware\\CubeCell\\ASR650x-Arduino\\tools\\gcc-arm-none-eabi\\bin\\arm-none-eabi-g++.exe",
+            "cStandard": "c11",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}

@@ -1,0 +1,7 @@
+{
+    "board": "CubeCell:ASR650x-Arduino:CubeCell-GPS",
+    "configuration": "LORAWAN_REGION=6,LORAWAN_CLASS=2,LORAWAN_DEVEUI=1,LORAWAN_NETMODE=0,LORAWAN_ADR=0,LORAWAN_UPLINKMODE=0,LORAWAN_Net_Reserve=0,LORAWAN_AT_SUPPORT=1,LORAWAN_RGB=0,LORAWAN_DebugLevel=2",
+    "sketch": "Heltec-Coverage.ino",
+    "output": "C:\\Users\\ian\\AppData\\Local\\Temp\\Heltec-Coverage.ino",
+    "port": "COM3"
+}
