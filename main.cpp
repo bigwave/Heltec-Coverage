@@ -63,22 +63,29 @@ static void wakeUp()
 {
   sleepTimerExpired = true;
 }
-
-static void lowPowerSleep(uint32_t sleeptime)
+void printDigits(int digits)
 {
-  displayDateTime();
-  displayInfo();
-  sleepTimerExpired = false;
-  TimerInit(&sleepTimer, &wakeUp);
-  TimerSetValue(&sleepTimer, sleeptime);
-  TimerStart(&sleepTimer);
-  //Low power handler also gets interrupted by other timers
-  //So wait until our timer had expired
-  while (!sleepTimerExpired)
-    lowPowerHandler();
-  TimerStop(&sleepTimer);
+  // utility function for digital clock display: prints preceding colon and leading 0
+  Serial.print(":");
+  if (digits < 10)
+    Serial.print('0');
+  Serial.print(digits);
 }
 
+void digitalClockDisplay()
+{
+  // digital clock display of the time
+  Serial.print(hour());
+  printDigits(minute());
+  printDigits(second());
+  Serial.print(" ");
+  Serial.print(day());
+  Serial.print(" ");
+  Serial.print(month());
+  Serial.print(" ");
+  Serial.print(year());
+  Serial.println();
+}
 int32_t fracPart(double val, int n)
 {
   return (int32_t)((val - (int32_t)(val)) * pow(10, n));
@@ -161,7 +168,7 @@ void displayGPSInfo()
   // display.drawString(0, 48, str);
   display.display();
 }
-void displayDateTime()
+void displayDateTime(boolean loraTransmitting)
 {
   display.setColor(BLACK);
   display.fillRect(0, 0, 128, 40);
@@ -201,8 +208,35 @@ void displayDateTime()
   str[index] = 0;
   display.drawString(60, 30, str);
 
+  display.setTextAlignment(TEXT_ALIGN_RIGHT);
+  if (loraTransmitting)
+  {
+    display.drawString(128, 10, "Lora");
+  }
+  else
+  {
+    display.drawString(128, 10, "GPS");
+  }
+  display.setTextAlignment(TEXT_ALIGN_LEFT);
+
   display.display();
 }
+
+static void lowPowerSleep(uint32_t sleeptime)
+{
+  displayDateTime(false);
+  displayInfo();
+  sleepTimerExpired = false;
+  TimerInit(&sleepTimer, &wakeUp);
+  TimerSetValue(&sleepTimer, sleeptime);
+  TimerStart(&sleepTimer);
+  //Low power handler also gets interrupted by other timers
+  //So wait until our timer had expired
+  while (!sleepTimerExpired)
+    lowPowerHandler();
+  TimerStop(&sleepTimer);
+}
+
 
 void VextON(void)
 {
@@ -380,7 +414,7 @@ void displayRgb()
 ///////////////////////////////////////////////////
 void loop()
 {
-  displayDateTime();
+  displayDateTime(false);
   displayRgb();
   if (LoRaWAN.busy())
   {
@@ -394,7 +428,6 @@ void loop()
     Radio.IrqProcess();
     return;
   }
-
   uint32_t starttime = millis();
   while ((millis() - starttime) < 1000)
   {
@@ -426,10 +459,10 @@ void loop()
 
   if (currentAge < lastGpsAge)
   {
-    lastGpsFix = now();
+   lastGpsFix = now();
     display.clear();
     displayGPSInfo();
-    displayDateTime();
+    displayDateTime(true);
     displayInfo();
     prepareTxFrame();
     if (LoRaWAN.send(appDataSize, appData, 2, true))
@@ -440,14 +473,15 @@ void loop()
     {
       Serial.println("Send FAILED");
     }
+    displayDateTime(false);
 
     lastGpsAge = Air530.location.age();
   }
-  
+
   DeviceClass_t lorawanClass = LORAWAN_CLASS;
   if (lorawanClass == CLASS_A)
-  { 
-          Serial.println("lowPowerSleep");
+  {
+    Serial.println("lowPowerSleep");
 
     lowPowerSleep(15000);
   }
@@ -492,26 +526,3 @@ void myLoRaWanFCNCheck(bool ackReceived, uint8_t rssi)
   lastRssi = rssi;
 }
 
-void digitalClockDisplay()
-{
-  // digital clock display of the time
-  Serial.print(hour());
-  printDigits(minute());
-  printDigits(second());
-  Serial.print(" ");
-  Serial.print(day());
-  Serial.print(" ");
-  Serial.print(month());
-  Serial.print(" ");
-  Serial.print(year());
-  Serial.println();
-}
-
-void printDigits(int digits)
-{
-  // utility function for digital clock display: prints preceding colon and leading 0
-  Serial.print(":");
-  if (digits < 10)
-    Serial.print('0');
-  Serial.print(digits);
-}

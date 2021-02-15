@@ -2,6 +2,10 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"name": "HTCC-AB02S Coverage",
+			"path": "..\\..\\PlatformIO\\Projects\\HTCC-AB02S Coverage"
 		}
 	],
 	"settings": {
